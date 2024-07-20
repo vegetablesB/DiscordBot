@@ -1,0 +1,165 @@
+# Python related
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# VSCode related
+.vscode/
+*.code-workspace
+
+# macOS related
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# macOS Finder
+*.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+*/Icon?
+*/.DocumentRevisions-V100
+*/.fseventsd
+*/.TemporaryItems
+*/.apdisk
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Translations
+*.mo
+*.pot
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyCharm
+.idea/
+
+# Environments
+.env
+.env.local
+.env.*.py
+*.env
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Environments variables
+.env
+*.env
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Profiling data
+.prof
+
+# Pytest
+.pytest_cache/
+
+# Sublime Text
+*.sublime-workspace
+
+# Sphinx documentation
+docs/_build/
+
+# Coverage reports
+coverage/
+
+# pyenv
+.python-version
+
+# pytest
+.cache
+
+# Mypy
+.mypy_cache/
+dmypy.json
+dmypy.json.5
+
+# Pylint
+.pylint.d
+
+# Pycharm
+.idea/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# MacOS
+.DS_Store
+
+# Local stack config files
+.localstack
+.localstack_startup.log
+
+# Secrets and sensitive files
+secrets.json
+config.json
+bot_config.py
