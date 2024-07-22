@@ -36,6 +36,9 @@ The Transcription bot listens for voice file attachments in messages. When it de
 
 - Attach an audio file to a message in any channel where the bot is present. The bot will automatically process and transcribe the audio, sending the transcription back to the channel.
 
+[RPReplay_Final1721660925.webm](https://github.com/user-attachments/assets/1266eef4-60fb-4056-9267-083939de5f80)
+
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
