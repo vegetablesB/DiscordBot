@@ -53,8 +53,20 @@ async def on_message(message):
                         transcription = transcribe_voice_file(segment)
                         transcriptions.append(transcription)
                     full_transcription = " ".join(transcriptions)
-                    await message.channel.send(
-                        f'Transcription: {full_transcription}')
+
+                    if len(full_transcription) >= 2000:
+                        # Write the transcription to a text file
+                        text_file_path = file_path.rsplit(
+                            '.', 1)[0] + '_transcription.txt'
+                        with open(text_file_path, 'w') as text_file:
+                            text_file.write(full_transcription)
+
+                        await message.channel.send(
+                            file=discord.File(text_file_path))
+                        os.remove(text_file_path)
+                    else:
+                        await message.channel.send(
+                            f'Transcription: {full_transcription}')
                 except Exception as e:
                     await message.channel.send(
                         f'Error during transcription: {e}')
