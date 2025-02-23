@@ -1,7 +1,6 @@
-from openai import OpenAI
 import discord
 import os
-from pydub import AudioSegment
+import replicate
 
 # Initialize the bot
 intents = discord.Intents.default()
@@ -13,10 +12,12 @@ intents.voice_states = True
 bot = discord.Client(intents=intents)
 
 TOKEN = 'BOT_TOKEN'
+MODEL = (
+    "openai/whisper:"
+    "8099696689d249cf8b122d833c36ac3f75505c666a395ca40ef26f68e7d3d16e"
+)
 
-client = OpenAI()
-
-MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB
+# Whisper openai api is 0.006/min, but replicate is 0.0006/min
 
 
 @bot.event
@@ -38,70 +39,39 @@ async def on_message(message):
                 with open(file_path, 'wb') as f:
                     await attachment.save(f)
 
-                # Check the file size
-                file_size = os.path.getsize(file_path)
-                if file_size > MAX_FILE_SIZE:
-                    # Split the file if it exceeds the size limit
-                    segments = split_audio_file(file_path)
-                else:
-                    segments = [file_path]
-
-                # Send each segment to OpenAI and get the transcription
+                # Send file to Replicate Openai Whisper-V3 and get the transcription
                 try:
-                    transcriptions = []
-                    for segment in segments:
-                        transcription = transcribe_voice_file(segment)
-                        transcriptions.append(transcription)
-                    full_transcription = " ".join(transcriptions)
+                    transcription = transcribe_voice_file(file_path)
 
-                    if len(full_transcription) >= 2000:
+                    if len(transcription) >= 2000:
                         # Write the transcription to a text file
                         text_file_path = file_path.rsplit(
                             '.', 1)[0] + '_transcription.txt'
                         with open(text_file_path, 'w') as text_file:
-                            text_file.write(full_transcription)
+                            text_file.write(transcription)
 
                         await message.channel.send(
                             file=discord.File(text_file_path))
                         os.remove(text_file_path)
                     else:
                         await message.channel.send(
-                            f'Transcription: {full_transcription}')
+                            f'Transcription: {transcription}')
                 except Exception as e:
                     await message.channel.send(
                         f'Error during transcription: {e}')
 
-                # Clean up the files
-                for segment in segments:
-                    os.remove(segment)
-
-
-def split_audio_file(file_path):
-    audio = AudioSegment.from_file(file_path)
-    file_size = os.path.getsize(file_path)
-
-    # Calculate the duration for each segment in milliseconds
-    segment_duration_ms = (MAX_FILE_SIZE / file_size) * len(audio)
-
-    segments = []
-
-    for i in range(0, len(audio), int(segment_duration_ms)):
-        segment = audio[i:i + int(segment_duration_ms)]
-        segment_file_path = f"{file_path.rsplit('.', 1)[0]}_segment_{i}.wav"
-        segment.export(segment_file_path, format="wav")
-        segments.append(segment_file_path)
-
-    return segments
-
 
 def transcribe_voice_file(file_path):
     audio_file = open(file_path, "rb")
-    transcription = client.audio.transcriptions.create(
-        model="whisper-1",
-        file=audio_file,
-        response_format="text"
+    input = {
+        "audio": audio_file
+    }
+    output = replicate.run(
+        MODEL,
+        input=input
     )
-    return transcription
+    os.remove(file_path)
+    return output['transcription']
 
 
 bot.run(TOKEN)
